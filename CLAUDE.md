@@ -15,10 +15,12 @@
 
 - **Assets/_Example/** : サンプルのプロジェクトコード
   - **Runtime/** : 実行時コード (.cs)
-  - **Plugins**
-    - **iOS** : iOS のネイティブプラグイン (.swift, .mm)
   - **Scenes/** : シーンファイル
   - **Settings/** : Input Systemなどの設定ファイル
+- **Assets/LifecycleHandler/** : ライフサイクルイベント購読用のプラグイン
+  - **Runtime/** : 実行時コード (.cs)
+  - **Plugins**
+    - **iOS** : iOS のネイティブプラグイン (.swift, .mm)
 
 ## Development Notes
 
