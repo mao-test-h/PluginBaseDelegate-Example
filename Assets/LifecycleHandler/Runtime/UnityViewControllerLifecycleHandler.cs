@@ -1,3 +1,4 @@
+#if UNITY_IOS
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -9,12 +10,10 @@ namespace LifecycleHandler
     internal sealed class UnityViewControllerLifecycleHandler : IDisposable
     {
         private static readonly Dictionary<IntPtr, IViewControllerLifecycleListener> Listeners = new();
+        private readonly IntPtr _ptr;
         private bool _disposed;
-        private IntPtr _ptr;
 
-        private UnityViewControllerLifecycleHandler(IntPtr ptr) => _ptr = ptr;
-
-        internal static UnityViewControllerLifecycleHandler Create(IViewControllerLifecycleListener lifecycleListener)
+        public UnityViewControllerLifecycleHandler(IViewControllerLifecycleListener lifecycleListener)
         {
             var ptr = CreateUnityViewControllerLifecycleHandler(
                 ViewWillLayoutSubviewsCallbackStatic,
@@ -28,9 +27,8 @@ namespace LifecycleHandler
 
             Assert.IsNotNull(lifecycleListener);
             Listeners[ptr] = lifecycleListener;
-
             UnityRegisterViewControllerListener(ptr);
-            return new UnityViewControllerLifecycleHandler(ptr);
+            _ptr = ptr;
         }
 
         ~UnityViewControllerLifecycleHandler()
@@ -58,11 +56,8 @@ namespace LifecycleHandler
                 Listeners.Remove(_ptr);
                 UnityUnregisterViewControllerListener(_ptr);
                 ReleaseUnityViewControllerLifecycleHandler(_ptr);
-                _ptr = IntPtr.Zero;
                 _disposed = true;
             }
-
-            return;
         }
 
 
@@ -176,3 +171,5 @@ namespace LifecycleHandler
         }
     }
 }
+
+#endif
