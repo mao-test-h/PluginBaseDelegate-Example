@@ -9,7 +9,7 @@ namespace _Example
     {
         [SerializeField] private Button playMovieButton;
 
-        private string Tag => $"[{nameof(ExampleApplication)}]";
+        private static string Tag => $"[{nameof(ExampleApplication)}]";
         private IDisposable _lifecycleHandler;
 
         private void Awake()
@@ -30,12 +30,12 @@ namespace _Example
             _lifecycleHandler.Dispose();
         }
 
-        void OnApplicationFocus(bool hasFocus)
+        private void OnApplicationFocus(bool hasFocus)
         {
             Debug.Log($"{Tag} >> OnApplicationFocus: " + hasFocus);
         }
 
-        void OnApplicationPause(bool pauseStatus)
+        private void OnApplicationPause(bool pauseStatus)
         {
             Debug.Log($"{Tag} >> OnApplicationPause: " + pauseStatus);
         }
