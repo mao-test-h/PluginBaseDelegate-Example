@@ -10,10 +10,10 @@ namespace LifecycleHandler
     {
         private static readonly Dictionary<IntPtr, Action> ViewWillLayoutSubviewsCallbacks = new();
         private static readonly Dictionary<IntPtr, Action> ViewDidLayoutSubviewsCallbacks = new();
-        private static readonly Dictionary<IntPtr, Action> ViewWillDisappearCallbacks = new();
-        private static readonly Dictionary<IntPtr, Action> ViewDidDisappearCallbacks = new();
-        private static readonly Dictionary<IntPtr, Action> ViewWillAppearCallbacks = new();
-        private static readonly Dictionary<IntPtr, Action> ViewDidAppearCallbacks = new();
+        private static readonly Dictionary<IntPtr, Action<bool>> ViewWillDisappearCallbacks = new();
+        private static readonly Dictionary<IntPtr, Action<bool>> ViewDidDisappearCallbacks = new();
+        private static readonly Dictionary<IntPtr, Action<bool>> ViewWillAppearCallbacks = new();
+        private static readonly Dictionary<IntPtr, Action<bool>> ViewDidAppearCallbacks = new();
         private static readonly Dictionary<IntPtr, Action> InterfaceWillChangeOrientationCallbacks = new();
         private static readonly Dictionary<IntPtr, Action> InterfaceDidChangeOrientationCallbacks = new();
         private bool _disposed;
@@ -24,10 +24,10 @@ namespace LifecycleHandler
         internal static UnityViewControllerLifecycleHandler Create(
             Action onViewWillLayoutSubviews = null,
             Action onViewDidLayoutSubviews = null,
-            Action onViewWillDisappear = null,
-            Action onViewDidDisappear = null,
-            Action onViewWillAppear = null,
-            Action onViewDidAppear = null,
+            Action<bool> onViewWillDisappear = null,
+            Action<bool> onViewDidDisappear = null,
+            Action<bool> onViewWillAppear = null,
+            Action<bool> onViewDidAppear = null,
             Action onInterfaceWillChangeOrientation = null,
             Action onInterfaceDidChangeOrientation = null)
         {
@@ -120,13 +120,13 @@ namespace LifecycleHandler
 
         private delegate void ViewDidLayoutSubviewsCallback(IntPtr context);
 
-        private delegate void ViewWillDisappearCallback(IntPtr context);
+        private delegate void ViewWillDisappearCallback(IntPtr context, byte animated);
 
-        private delegate void ViewDidDisappearCallback(IntPtr context);
+        private delegate void ViewDidDisappearCallback(IntPtr context, byte animated);
 
-        private delegate void ViewWillAppearCallback(IntPtr context);
+        private delegate void ViewWillAppearCallback(IntPtr context, byte animated);
 
-        private delegate void ViewDidAppearCallback(IntPtr context);
+        private delegate void ViewDidAppearCallback(IntPtr context, byte animated);
 
         private delegate void InterfaceWillChangeOrientationCallback(IntPtr context);
 
@@ -151,38 +151,38 @@ namespace LifecycleHandler
         }
 
         [MonoPInvokeCallback(typeof(ViewWillDisappearCallback))]
-        private static void ViewWillDisappearCallbackStatic(IntPtr context)
+        private static void ViewWillDisappearCallbackStatic(IntPtr context, byte animated)
         {
             if (ViewWillDisappearCallbacks.TryGetValue(context, out var callback))
             {
-                callback.Invoke();
+                callback.Invoke(animated != 0);
             }
         }
 
         [MonoPInvokeCallback(typeof(ViewDidDisappearCallback))]
-        private static void ViewDidDisappearCallbackStatic(IntPtr context)
+        private static void ViewDidDisappearCallbackStatic(IntPtr context, byte animated)
         {
             if (ViewDidDisappearCallbacks.TryGetValue(context, out var callback))
             {
-                callback.Invoke();
+                callback.Invoke(animated != 0);
             }
         }
 
         [MonoPInvokeCallback(typeof(ViewWillAppearCallback))]
-        private static void ViewWillAppearCallbackStatic(IntPtr context)
+        private static void ViewWillAppearCallbackStatic(IntPtr context, byte animated)
         {
             if (ViewWillAppearCallbacks.TryGetValue(context, out var callback))
             {
-                callback.Invoke();
+                callback.Invoke(animated != 0);
             }
         }
 
         [MonoPInvokeCallback(typeof(ViewDidAppearCallback))]
-        private static void ViewDidAppearCallbackStatic(IntPtr context)
+        private static void ViewDidAppearCallbackStatic(IntPtr context, byte animated)
         {
             if (ViewDidAppearCallbacks.TryGetValue(context, out var callback))
             {
-                callback.Invoke();
+                callback.Invoke(animated != 0);
             }
         }
 

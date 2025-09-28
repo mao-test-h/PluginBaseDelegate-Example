@@ -1,12 +1,13 @@
 #include "PluginBase/UnityViewControllerListener.h"
+#include <stdint.h>
 
 // Callback types for all lifecycle events
 typedef void (*ViewWillLayoutSubviewsCallback)(void* context);
 typedef void (*ViewDidLayoutSubviewsCallback)(void* context);
-typedef void (*ViewWillDisappearCallback)(void* context);
-typedef void (*ViewDidDisappearCallback)(void* context);
-typedef void (*ViewWillAppearCallback)(void* context);
-typedef void (*ViewDidAppearCallback)(void* context);
+typedef void (*ViewWillDisappearCallback)(void* context, uint8_t animated);
+typedef void (*ViewDidDisappearCallback)(void* context, uint8_t animated);
+typedef void (*ViewWillAppearCallback)(void* context, uint8_t animated);
+typedef void (*ViewDidAppearCallback)(void* context, uint8_t animated);
 typedef void (*InterfaceWillChangeOrientationCallback)(void* context);
 typedef void (*InterfaceDidChangeOrientationCallback)(void* context);
 
@@ -40,28 +41,36 @@ typedef void (*InterfaceDidChangeOrientationCallback)(void* context);
 - (void)viewWillDisappear:(NSNotification*)notification
 {
     if (self.viewWillDisappearCallback) {
-        self.viewWillDisappearCallback((__bridge void*)self);
+        NSNumber* animatedNumber = notification.userInfo[@"animated"];
+        uint8_t animated = animatedNumber ? [animatedNumber boolValue] : 0;
+        self.viewWillDisappearCallback((__bridge void*)self, animated);
     }
 }
 
 - (void)viewDidDisappear:(NSNotification*)notification
 {
     if (self.viewDidDisappearCallback) {
-        self.viewDidDisappearCallback((__bridge void*)self);
+        NSNumber* animatedNumber = notification.userInfo[@"animated"];
+        uint8_t animated = animatedNumber ? [animatedNumber boolValue] : 0;
+        self.viewDidDisappearCallback((__bridge void*)self, animated);
     }
 }
 
 - (void)viewWillAppear:(NSNotification*)notification
 {
     if (self.viewWillAppearCallback) {
-        self.viewWillAppearCallback((__bridge void*)self);
+        NSNumber* animatedNumber = notification.userInfo[@"animated"];
+        uint8_t animated = animatedNumber ? [animatedNumber boolValue] : 0;
+        self.viewWillAppearCallback((__bridge void*)self, animated);
     }
 }
 
 - (void)viewDidAppear:(NSNotification*)notification
 {
     if (self.viewDidAppearCallback) {
-        self.viewDidAppearCallback((__bridge void*)self);
+        NSNumber* animatedNumber = notification.userInfo[@"animated"];
+        uint8_t animated = animatedNumber ? [animatedNumber boolValue] : 0;
+        self.viewDidAppearCallback((__bridge void*)self, animated);
     }
 }
 
