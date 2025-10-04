@@ -4,7 +4,7 @@ Unity の iOS ビルド時に出力される `Classes/PluginBase/UnityViewContro
 
 ## 開発環境
 
-- Unity 6000.0.57f1
+- Unity 6000.0.58f2
   - JetBrains Rider
   - VSCode
 - Xcode 16.4
