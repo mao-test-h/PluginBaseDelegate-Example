@@ -3,12 +3,12 @@ using UnityIOSPluginBaseBridge;
 
 namespace LifecycleHandler
 {
-    public static class UnityViewControllerListenerBuilder
+    public static class LifeCycleListenerBuilder
     {
-        public static IDisposable Build(IUnityViewControllerListener listener)
+        public static IDisposable Build(ILifeCycleListener listener)
         {
 #if UNITY_IOS && !UNITY_EDITOR
-            var instance = new UnityViewControllerListenerBridge(listener);
+            var instance = new LifeCycleListenerBridge(listener);
 #else
             var instance = new DummyBridge();
 #endif
