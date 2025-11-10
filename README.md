@@ -1,6 +1,11 @@
 # PluginBaseDelegate-Example
 
-Unity の iOS ビルド時に出力される `Classes/PluginBase/UnityViewControllerListener.h` を用いた `UIViewController` のライフサイクルイベントの購読テスト。
+Unity の iOS ビルド時に出力される `Classes/PluginBase` 以下のイベントリスナーを用いた実装サンプル。
+
+- `UnityViewControllerListener`
+  - `UIViewController` のイベント
+- `LifeCycleListener` 
+  - アプリのライフサイクルイベント
 
 ## 開発環境
 

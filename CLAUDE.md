@@ -17,7 +17,7 @@
   - **Runtime/** : 実行時コード (.cs)
   - **Scenes/** : シーンファイル
   - **Settings/** : Input Systemなどの設定ファイル
-- **Assets/LifecycleHandler/** : ライフサイクルイベント購読用のプラグイン
+- **Assets/UnityIOSPluginBaseBridge/** : ライフサイクルイベント購読用のプラグイン
   - **Runtime/** : 実行時コード (.cs)
   - **Plugins**
     - **iOS** : iOS のネイティブプラグイン (.swift, .mm)
