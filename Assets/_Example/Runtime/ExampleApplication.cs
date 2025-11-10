@@ -6,16 +6,18 @@ using UnityIOSPluginBaseBridge;
 
 namespace _Example
 {
-    internal sealed class ExampleApplication : MonoBehaviour, IUnityViewControllerListener
+    internal sealed class ExampleApplication : MonoBehaviour, IUnityViewControllerListener, ILifeCycleListener
     {
         [SerializeField] private Button playMovieButton;
 
         private static string Tag => $"[{nameof(ExampleApplication)}]";
-        private IDisposable _lifecycleHandler;
+        private IDisposable _unityViewControllerListenerBridge;
+        private IDisposable _lifeCycleListenerBridge;
 
         private void Awake()
         {
-            _lifecycleHandler = UnityViewControllerListenerBuilder.Build(this);
+            _unityViewControllerListenerBridge = UnityViewControllerListenerBuilder.Build(this);
+            _lifeCycleListenerBridge = LifeCycleListenerBuilder.Build(this);
 
             // イベント確認用にフルスクリーン動画を再生
             playMovieButton.onClick.AddListener(() =>
@@ -28,7 +30,8 @@ namespace _Example
 
         private void OnDestroy()
         {
-            _lifecycleHandler.Dispose();
+            _unityViewControllerListenerBridge?.Dispose();
+            _lifeCycleListenerBridge?.Dispose();
         }
 
         private void OnApplicationFocus(bool hasFocus)
@@ -43,42 +46,82 @@ namespace _Example
 
         public void OnViewWillLayoutSubviewsCallbacks()
         {
-            Debug.Log($"{Tag} OnViewWillLayoutSubviews");
+            Debug.Log($"{Tag} [IUnityViewControllerListener] OnViewWillLayoutSubviews");
         }
 
         public void OnViewDidLayoutSubviewsCallbacks()
         {
-            Debug.Log($"{Tag} OnViewDidLayoutSubviews");
+            Debug.Log($"{Tag} [IUnityViewControllerListener] OnViewDidLayoutSubviews");
         }
 
         public void OnViewWillDisappearCallbacks(bool animated)
         {
-            Debug.Log($"{Tag} OnViewWillDisappear (animated: {animated})");
+            Debug.Log($"{Tag} [IUnityViewControllerListener] OnViewWillDisappear (animated: {animated})");
         }
 
         public void OnViewDidDisappearCallbacks(bool animated)
         {
-            Debug.Log($"{Tag} OnViewDidDisappear (animated: {animated})");
+            Debug.Log($"{Tag} [IUnityViewControllerListener] OnViewDidDisappear (animated: {animated})");
         }
 
         public void OnViewWillAppearCallbacks(bool animated)
         {
-            Debug.Log($"{Tag} OnViewWillAppear (animated: {animated})");
+            Debug.Log($"{Tag} [IUnityViewControllerListener] OnViewWillAppear (animated: {animated})");
         }
 
         public void OnViewDidAppearCallbacks(bool animated)
         {
-            Debug.Log($"{Tag} OnViewDidAppear (animated: {animated})");
+            Debug.Log($"{Tag} [IUnityViewControllerListener] OnViewDidAppear (animated: {animated})");
         }
 
         public void OnInterfaceWillChangeOrientationCallbacks()
         {
-            Debug.Log($"{Tag} OnInterfaceWillChangeOrientation");
+            Debug.Log($"{Tag} [IUnityViewControllerListener] OnInterfaceWillChangeOrientation");
         }
 
         public void OnInterfaceDidChangeOrientationCallbacks()
         {
-            Debug.Log($"{Tag} OnInterfaceDidChangeOrientation");
+            Debug.Log($"{Tag} [IUnityViewControllerListener] OnInterfaceDidChangeOrientation");
+        }
+
+        public void OnDidFinishLaunchingCallbacks()
+        {
+            Debug.Log($"{Tag} [ILifeCycleListener] OnDidFinishLaunching");
+        }
+
+        public void OnDidBecomeActiveCallbacks()
+        {
+            Debug.Log($"{Tag} [ILifeCycleListener] OnDidBecomeActive");
+        }
+
+        public void OnWillResignActiveCallbacks()
+        {
+            Debug.Log($"{Tag} [ILifeCycleListener] OnWillResignActive");
+        }
+
+        public void OnDidEnterBackgroundCallbacks()
+        {
+            Debug.Log($"{Tag} [ILifeCycleListener] OnDidEnterBackground");
+        }
+
+        public void OnWillEnterForegroundCallbacks()
+        {
+            Debug.Log($"{Tag} [ILifeCycleListener] OnWillEnterForeground");
+        }
+
+        public void OnWillTerminateCallbacks()
+        {
+            Debug.Log($"{Tag} [ILifeCycleListener] OnWillTerminate");
+        }
+
+        public void OnUnityDidUnloadCallbacks()
+        {
+            Debug.Log($"{Tag} [ILifeCycleListener] OnUnityDidUnload");
+        }
+
+        public void OnUnityDidQuitCallbacks()
+        {
+            Debug.Log($"{Tag} [ILifeCycleListener] OnUnityDidQuit");
         }
     }
 }
