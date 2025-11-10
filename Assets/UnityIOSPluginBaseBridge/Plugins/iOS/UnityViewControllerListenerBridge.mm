@@ -1,7 +1,7 @@
 #include "PluginBase/UnityViewControllerListener.h"
 #include <stdint.h>
 
-// Callback types for all lifecycle events
+// view changes on the main view controller
 typedef void (*ViewWillLayoutSubviewsCallback)(void* context);
 typedef void (*ViewDidLayoutSubviewsCallback)(void* context);
 typedef void (*ViewWillDisappearCallback)(void* context, uint8_t animated);
@@ -11,7 +11,7 @@ typedef void (*ViewDidAppearCallback)(void* context, uint8_t animated);
 typedef void (*InterfaceWillChangeOrientationCallback)(void* context);
 typedef void (*InterfaceDidChangeOrientationCallback)(void* context);
 
-@interface UnityViewControllerLifecycleHandler : NSObject<UnityViewControllerListener>
+@interface UnityViewControllerListenerBridge : NSObject<UnityViewControllerListener>
 @property (nonatomic, assign) ViewWillLayoutSubviewsCallback viewWillLayoutSubviewsCallback;
 @property (nonatomic, assign) ViewDidLayoutSubviewsCallback viewDidLayoutSubviewsCallback;
 @property (nonatomic, assign) ViewWillDisappearCallback viewWillDisappearCallback;
@@ -22,7 +22,7 @@ typedef void (*InterfaceDidChangeOrientationCallback)(void* context);
 @property (nonatomic, assign) InterfaceDidChangeOrientationCallback interfaceDidChangeOrientationCallback;
 @end
 
-@implementation UnityViewControllerLifecycleHandler
+@implementation UnityViewControllerListenerBridge
 
 - (void)viewWillLayoutSubviews:(NSNotification*)notification
 {
@@ -94,7 +94,7 @@ typedef void (*InterfaceDidChangeOrientationCallback)(void* context);
 extern "C" {
 #endif
 
-void* LifecycleHandler_CreateUnityViewControllerLifecycleHandler(
+void* UnityIOSPluginBaseBridge_CreateUnityViewControllerListenerBridge(
                                                                  ViewWillLayoutSubviewsCallback viewWillLayoutSubviewsCallback,
                                                                  ViewDidLayoutSubviewsCallback viewDidLayoutSubviewsCallback,
                                                                  ViewWillDisappearCallback viewWillDisappearCallback,
@@ -104,41 +104,41 @@ void* LifecycleHandler_CreateUnityViewControllerLifecycleHandler(
                                                                  InterfaceWillChangeOrientationCallback interfaceWillChangeOrientationCallback,
                                                                  InterfaceDidChangeOrientationCallback interfaceDidChangeOrientationCallback)
 {
-    UnityViewControllerLifecycleHandler* handler = [[UnityViewControllerLifecycleHandler alloc] init];
-    handler.viewWillLayoutSubviewsCallback = viewWillLayoutSubviewsCallback;
-    handler.viewDidLayoutSubviewsCallback = viewDidLayoutSubviewsCallback;
-    handler.viewWillDisappearCallback = viewWillDisappearCallback;
-    handler.viewDidDisappearCallback = viewDidDisappearCallback;
-    handler.viewWillAppearCallback = viewWillAppearCallback;
-    handler.viewDidAppearCallback = viewDidAppearCallback;
-    handler.interfaceWillChangeOrientationCallback = interfaceWillChangeOrientationCallback;
-    handler.interfaceDidChangeOrientationCallback = interfaceDidChangeOrientationCallback;
-    return (__bridge_retained void*)handler;
+    UnityViewControllerListenerBridge* bridge = [[UnityViewControllerListenerBridge alloc] init];
+    bridge.viewWillLayoutSubviewsCallback = viewWillLayoutSubviewsCallback;
+    bridge.viewDidLayoutSubviewsCallback = viewDidLayoutSubviewsCallback;
+    bridge.viewWillDisappearCallback = viewWillDisappearCallback;
+    bridge.viewDidDisappearCallback = viewDidDisappearCallback;
+    bridge.viewWillAppearCallback = viewWillAppearCallback;
+    bridge.viewDidAppearCallback = viewDidAppearCallback;
+    bridge.interfaceWillChangeOrientationCallback = interfaceWillChangeOrientationCallback;
+    bridge.interfaceDidChangeOrientationCallback = interfaceDidChangeOrientationCallback;
+    return (__bridge_retained void*)bridge;
 }
 
-void LifecycleHandler_ReleaseUnityViewControllerLifecycleHandler(void* ptr)
+void UnityIOSPluginBaseBridge_ReleaseUnityViewControllerListenerBridge(void* ptr)
 {
-    UnityViewControllerLifecycleHandler* handler = (__bridge_transfer UnityViewControllerLifecycleHandler*)ptr;
-    handler.viewWillLayoutSubviewsCallback = nil;
-    handler.viewDidLayoutSubviewsCallback = nil;
-    handler.viewWillDisappearCallback = nil;
-    handler.viewDidDisappearCallback = nil;
-    handler.viewWillAppearCallback = nil;
-    handler.viewDidAppearCallback = nil;
-    handler.interfaceWillChangeOrientationCallback = nil;
-    handler.interfaceDidChangeOrientationCallback = nil;
+    UnityViewControllerListenerBridge* bridge = (__bridge_transfer UnityViewControllerListenerBridge*)ptr;
+    bridge.viewWillLayoutSubviewsCallback = nil;
+    bridge.viewDidLayoutSubviewsCallback = nil;
+    bridge.viewWillDisappearCallback = nil;
+    bridge.viewDidDisappearCallback = nil;
+    bridge.viewWillAppearCallback = nil;
+    bridge.viewDidAppearCallback = nil;
+    bridge.interfaceWillChangeOrientationCallback = nil;
+    bridge.interfaceDidChangeOrientationCallback = nil;
 }
 
-void LifecycleHandler_UnityRegisterViewControllerListener(void* ptr)
+void UnityIOSPluginBaseBridge_UnityRegisterViewControllerListener(void* ptr)
 {
-    UnityViewControllerLifecycleHandler* handler = (__bridge UnityViewControllerLifecycleHandler*)ptr;
-    UnityRegisterViewControllerListener(handler);
+    UnityViewControllerListenerBridge* bridge = (__bridge UnityViewControllerListenerBridge*)ptr;
+    UnityRegisterViewControllerListener(bridge);
 }
 
-void LifecycleHandler_UnityUnregisterViewControllerListener(void* ptr)
+void UnityIOSPluginBaseBridge_UnityUnregisterViewControllerListener(void* ptr)
 {
-    UnityViewControllerLifecycleHandler* handler = (__bridge UnityViewControllerLifecycleHandler*)ptr;
-    UnityUnregisterViewControllerListener(handler);
+    UnityViewControllerListenerBridge* bridge = (__bridge UnityViewControllerListenerBridge*)ptr;
+    UnityUnregisterViewControllerListener(bridge);
 }
 
 #ifdef __cplusplus

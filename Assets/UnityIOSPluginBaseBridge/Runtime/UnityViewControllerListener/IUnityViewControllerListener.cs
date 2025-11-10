@@ -1,6 +1,6 @@
-namespace LifecycleHandler
+namespace UnityIOSPluginBaseBridge
 {
-    public interface IViewControllerLifecycleListener
+    public interface IUnityViewControllerListener
     {
         void OnViewWillLayoutSubviewsCallbacks();
         void OnViewDidLayoutSubviewsCallbacks();
