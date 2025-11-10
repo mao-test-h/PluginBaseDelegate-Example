@@ -5,17 +5,17 @@ using System.Runtime.InteropServices;
 using AOT;
 using UnityEngine.Assertions;
 
-namespace LifecycleHandler
+namespace UnityIOSPluginBaseBridge
 {
-    internal sealed class UnityViewControllerLifecycleHandler : IDisposable
+    internal sealed class UnityViewControllerListenerBridge : IDisposable
     {
-        private static readonly Dictionary<IntPtr, IViewControllerLifecycleListener> Listeners = new();
+        private static readonly Dictionary<IntPtr, IUnityViewControllerListener> Listeners = new();
         private readonly IntPtr _ptr;
         private bool _disposed;
 
-        public UnityViewControllerLifecycleHandler(IViewControllerLifecycleListener lifecycleListener)
+        public UnityViewControllerListenerBridge(IUnityViewControllerListener lifecycleListener)
         {
-            var ptr = CreateUnityViewControllerLifecycleHandler(
+            var ptr = CreateUnityViewControllerListenerBridge(
                 ViewWillLayoutSubviewsCallbackStatic,
                 ViewDidLayoutSubviewsCallbackStatic,
                 ViewWillDisappearCallbackStatic,
@@ -31,7 +31,7 @@ namespace LifecycleHandler
             _ptr = ptr;
         }
 
-        ~UnityViewControllerLifecycleHandler()
+        ~UnityViewControllerListenerBridge()
         {
             Dispose(false);
         }
@@ -55,14 +55,14 @@ namespace LifecycleHandler
 
                 Listeners.Remove(_ptr);
                 UnityUnregisterViewControllerListener(_ptr);
-                ReleaseUnityViewControllerLifecycleHandler(_ptr);
+                ReleaseUnityViewControllerListenerBridge(_ptr);
                 _disposed = true;
             }
         }
 
 
-        [DllImport("__Internal", EntryPoint = "LifecycleHandler_CreateUnityViewControllerLifecycleHandler")]
-        private static extern IntPtr CreateUnityViewControllerLifecycleHandler(
+        [DllImport("__Internal", EntryPoint = "UnityIOSPluginBaseBridge_CreateUnityViewControllerListenerBridge")]
+        private static extern IntPtr CreateUnityViewControllerListenerBridge(
             ViewWillLayoutSubviewsCallback viewWillLayoutSubviewsCallback,
             ViewDidLayoutSubviewsCallback viewDidLayoutSubviewsCallback,
             ViewWillDisappearCallback viewWillDisappearCallback,
@@ -72,13 +72,13 @@ namespace LifecycleHandler
             InterfaceWillChangeOrientationCallback interfaceWillChangeOrientationCallback,
             InterfaceDidChangeOrientationCallback interfaceDidChangeOrientationCallback);
 
-        [DllImport("__Internal", EntryPoint = "LifecycleHandler_ReleaseUnityViewControllerLifecycleHandler")]
-        private static extern void ReleaseUnityViewControllerLifecycleHandler(IntPtr ptr);
+        [DllImport("__Internal", EntryPoint = "UnityIOSPluginBaseBridge_ReleaseUnityViewControllerListenerBridge")]
+        private static extern void ReleaseUnityViewControllerListenerBridge(IntPtr ptr);
 
-        [DllImport("__Internal", EntryPoint = "LifecycleHandler_UnityRegisterViewControllerListener")]
+        [DllImport("__Internal", EntryPoint = "UnityIOSPluginBaseBridge_UnityRegisterViewControllerListener")]
         private static extern void UnityRegisterViewControllerListener(IntPtr ptr);
 
-        [DllImport("__Internal", EntryPoint = "LifecycleHandler_UnityUnregisterViewControllerListener")]
+        [DllImport("__Internal", EntryPoint = "UnityIOSPluginBaseBridge_UnityUnregisterViewControllerListener")]
         private static extern void UnityUnregisterViewControllerListener(IntPtr ptr);
 
 

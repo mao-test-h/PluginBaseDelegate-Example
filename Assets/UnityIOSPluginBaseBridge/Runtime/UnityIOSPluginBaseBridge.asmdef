@@ -1,5 +1,5 @@
 {
-    "name": "LifecycleHandler",
+    "name": "UnityIOSPluginBaseBridge",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [],

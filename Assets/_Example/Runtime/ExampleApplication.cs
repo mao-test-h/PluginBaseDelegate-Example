@@ -2,10 +2,11 @@ using System;
 using LifecycleHandler;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityIOSPluginBaseBridge;
 
 namespace _Example
 {
-    internal sealed class ExampleApplication : MonoBehaviour, IViewControllerLifecycleListener
+    internal sealed class ExampleApplication : MonoBehaviour, IUnityViewControllerListener
     {
         [SerializeField] private Button playMovieButton;
 
@@ -14,7 +15,7 @@ namespace _Example
 
         private void Awake()
         {
-            _lifecycleHandler = ViewControllerLifecycleHandlerFactory.Create(this);
+            _lifecycleHandler = UnityViewControllerListenerBuilder.Build(this);
 
             // イベント確認用にフルスクリーン動画を再生
             playMovieButton.onClick.AddListener(() =>
